@@ -48,9 +48,6 @@
     </div>
 
     <a-scene physics="gravity: -9.8">
-      <!-- Para Móviles -->
-      <a-entity camera look-controls="touchEnabled: true" position="0 1.6 0"></a-entity>
-
       <!-- Luces y cielo -->
       <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
       <a-light type="directional" color="#ffffff" intensity="1" position="0 10 10"></a-light>
@@ -387,6 +384,33 @@
         infoPanelComponent.setLanguage(selectedLanguage);  // Cambiar idioma
       }
     });
+  });
+</script>
+<script>
+  // Función para obtener la posición GPS
+  function getGPS() {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(function(position) {
+        // Obtener latitud y longitud
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+
+        // Mapea las coordenadas del GPS al espacio 3D (esto es un ejemplo simplificado)
+        var x = lat * 100; // Ajustar según tu escala
+        var z = lon * 100; // Ajustar según tu escala
+
+        // Establecer la posición de la cámara
+        var camera = document.querySelector('#camara');
+        camera.setAttribute('position', {x: x, y: 1.6, z: z});
+      });
+    } else {
+      alert('Geolocalización no soportada');
+    }
+  }
+
+  // Llamar a la función cuando cargue la escena
+  document.querySelector('a-scene').addEventListener('loaded', function () {
+    getGPS();
   });
 </script>
 
