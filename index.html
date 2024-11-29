@@ -396,21 +396,33 @@
         var lon = position.coords.longitude;
 
         // Mapea las coordenadas del GPS al espacio 3D (esto es un ejemplo simplificado)
-        var x = lat * 100; // Ajustar según tu escala
-        var z = lon * 100; // Ajustar según tu escala
+        var x = lat * 100;  // Ajustar según tu escala
+        var z = lon * 100;  // Ajustar según tu escala
 
         // Establecer la posición de la cámara
         var camera = document.querySelector('#camara');
         camera.setAttribute('position', {x: x, y: 1.6, z: z});
+      }, function(error) {
+        console.error("Error obteniendo la localización: ", error);
       });
     } else {
       alert('Geolocalización no soportada');
     }
   }
 
+  // Verificar si el dispositivo es móvil
+  function isMobile() {
+    return window.innerWidth <= 768;  // Esto es solo un ejemplo, puedes ajustarlo
+  }
+
   // Llamar a la función cuando cargue la escena
   document.querySelector('a-scene').addEventListener('loaded', function () {
-    getGPS();
+    if (isMobile()) {
+      // Solo pedir la geolocalización si el dispositivo es móvil
+      getGPS();
+    } else {
+      console.log("Geolocalización solo disponible en dispositivos móviles.");
+    }
   });
 </script>
 
